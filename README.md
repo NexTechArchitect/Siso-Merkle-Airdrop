@@ -33,57 +33,63 @@
 
 ---
 
-## 🏗 System Architecture
+<div align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=00FF99&center=true&vCenter=true&width=1000&height=100&lines=SISO+MERKLE+AIRDROP;Production-Grade+Distribution;EIP-712+Signatures+%7C+Phased+Vesting;Gas-Optimized+Architecture" alt="Typing Effect" />
 
-The system is designed to minimize on-chain storage costs while maximizing security. We use a **Hybrid Off-Chain/On-Chain** model.
+  <br/>
 
-### 🧬 Execution Flow
+  <p>
+    <a href="https://github.com/NexTechArchitect/Siso-Merkle-Airdrop">
+      <img src="https://img.shields.io/badge/Standard-ERC20-363636?style=for-the-badge&logo=ethereum&logoColor=white" />
+    </a>
+    <img src="https://img.shields.io/badge/Security-EIP--712_Typed-6A0DAD?style=for-the-badge&logo=opensea&logoColor=white" />
+    <img src="https://img.shields.io/badge/Logic-Merkle_Proofs-007AFF?style=for-the-badge&logo=json&logoColor=white" />
+    <img src="https://img.shields.io/badge/Tech-Foundry-BE5212?style=for-the-badge&logo=foundry&logoColor=white" />
+  </p>
 
-This diagram illustrates how data moves from a simple JSON list to a secure on-chain claim.
+  <p width="80%">
+    <b>A production-grade architecture for distributing tokens efficiently.</b><br/>
+    Secured by Merkle Proofs and EIP-712 Signatures to minimize on-chain costs.
+  </p>
+
+  <br/>
+
+  <table>
+    <tr>
+      <td align="center"><a href="#-architectural-flow"><strong>🏗 Architecture</strong></a></td>
+      <td align="center"><a href="#-vesting-schedule"><strong>⏳ Vesting</strong></a></td>
+      <td align="center"><a href="#-security-mechanics"><strong>🔐 Security</strong></a></td>
+      <td align="center"><a href="#-project-structure"><strong>📂 Structure</strong></a></td>
+    </tr>
+  </table>
+
+</div>
+
+---
+
+## 🏗 Architectural Flow
+
+The system splits logic between **Off-Chain Computation** (saving gas) and **On-Chain Verification** (security).
 
 ```mermaid
-graph TD
-    %% Nodes
-    subgraph "Phase 1: Off-Chain Calculation"
-        Input[("📄 Input: Users.json")]
-        Script{{"⚙️ Merkle Script"}}
-        Output[("💾 Output: Root & Proofs")]
+graph LR
+    subgraph OFF [💻 Off-Chain Backend]
+      Input[("📄 Input List")] -->|Hash| Gen{Merkle Script}
+      Gen -->|Generate| Root[Merkle Root]
+      Gen -->|Generate| Proofs[JSON Proofs]
     end
 
-    subgraph "Phase 2: User Action"
-        User((👤 User))
-        MetaMask[["🦊 Wallet (EIP-712)"]]
+    subgraph ON [⛓️ On-Chain Contract]
+      Root -.->|1. Deploy Root| Contract[Airdrop Contract]
+      User((👤 User)) -->|2. Sign Request| Wallet[MetaMask]
+      Wallet -->|3. Submit Proof| Contract
+      Contract -->|4. Verify & Transfer| User
     end
 
-    subgraph "Phase 3: On-Chain Verification"
-        Contract["⛓️ Airdrop Contract"]
-        Verify{"🔍 Verify Logic"}
-        Transfer["💸 Transfer Tokens"]
-    end
-
-    %% Connections
-    Input --> Script
-    Script -->|Generate Hash| Output
-    Output -.->|1. Deploy Root| Contract
-    
-    User -->|2. Request Claim| MetaMask
-    MetaMask -->|3. Sign Message| Contract
-    Output -.->|4. Provide Proof| Contract
-    
-    Contract --> Verify
-    Verify -->|If Valid| Transfer
-    Transfer --> User
-
-    %% Styling
-    style Input fill:#222,stroke:#fff,stroke-width:1px
-    style Script fill:#ff9900,stroke:#333,stroke-width:2px,color:#000
-    style Output fill:#222,stroke:#00ff99,stroke-width:2px
-    
-    style Contract fill:#111,stroke:#007aff,stroke-width:2px
-    style Verify fill:#6a0dad,stroke:#fff,stroke-width:2px
-
-```
-
+    style OFF fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
+    style ON fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
+    style Contract fill:#222,stroke:#007AFF,stroke-width:2px
+    style Gen fill:#333,stroke:#FF9900,stroke-width:2px
 ### 🧠 How It Works (Step-by-Step)
 
 | Step | Component | Action & Description |
