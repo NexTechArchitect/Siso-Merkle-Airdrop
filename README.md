@@ -153,38 +153,19 @@ make deploy ARGS="--network sepolia"
 ---
 
 <div align="center">
+  <br/>
+  <img src="https://raw.githubusercontent.com/rajput2107/rajput2107/master/Assets/Developer.gif" width="45" />
+  <br/>
+  <b>Developed by NexTechArchitect</b>
+  <br/>
+  <i>Building the Future of Web3</i>
+  <br/><br/>
 
-
-
-
-
-<b>Protocol Engineered by NexTechArchitect</b>
-
-
-
-
-
-<i>Smart Contract Security • Foundry • Cryptography</i>
-
-
-
-
-
-
-<a href="https://github.com/NexTechArchitect">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/GitHub-181717%3Fstyle%3Dfor-the-badge%26logo%3Dgithub%26logoColor%3Dwhite" alt="GitHub"/>
-</a>
-&nbsp;&nbsp;
-<a href="https://linkedin.com/in/amit-kumar-811a11277">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/LinkedIn-0077B5%3Fstyle%3Dfor-the-badge%26logo%3Dlinkedin%26logoColor%3Dwhite" alt="LinkedIn"/>
-</a>
-&nbsp;&nbsp;
-<a href="https://x.com/itZ_AmiT0">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/X-000000%3Fstyle%3Dfor-the-badge%26logo%3Dx%26logoColor%3Dwhite" alt="X"/>
-</a>
-
+  <a href="https://github.com/NexTechArchitect">
+    <img src="https://img.shields.io/badge/GitHub-Profile-181717?style=flat&logo=github&logoColor=white" alt="GitHub"/>
+  </a>
+  <a href="https://linkedin.com/in/amit-kumar-811a11277">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+  </a>
 </div>
 
-```
-
-```
