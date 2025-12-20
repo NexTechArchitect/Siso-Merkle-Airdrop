@@ -35,34 +35,68 @@
 
 ## 🏗 System Architecture
 
-The protocol uses a **Hybrid Architecture** to minimize gas costs. The heavy lifting (tree generation) happens off-chain, while the critical verification happens on-chain.
+The system is designed to minimize on-chain storage costs while maximizing security. We use a **Hybrid Off-Chain/On-Chain** model.
 
-### 🧬 Data Logic Flow
+### 🧬 Execution Flow
+
+This diagram illustrates how data moves from a simple JSON list to a secure on-chain claim.
 
 ```mermaid
-graph LR
-    subgraph "OFF-CHAIN (Backend)"
-    Input[("Whitelist.json")] -->|Process| Script{Merkle.js}
-    Script -->|Generate| Root[Merkle Root]
-    Script -->|Generate| Proofs[Proofs.json]
+graph TD
+    %% Nodes
+    subgraph "Phase 1: Off-Chain Calculation"
+        Input[("📄 Input: Users.json")]
+        Script{{"⚙️ Merkle Script"}}
+        Output[("💾 Output: Root & Proofs")]
     end
 
-    subgraph "ON-CHAIN (Smart Contract)"
-    Root -.->|Deploy| Contract[Airdrop Contract]
-    User((User)) -->|1. Sign Message| Wallet[MetaMask]
-    Wallet -->|2. Proof + Signature| Contract
-    Contract -->|3. Verify & Send| User
+    subgraph "Phase 2: User Action"
+        User((👤 User))
+        MetaMask[["🦊 Wallet (EIP-712)"]]
     end
 
-    style Input fill:#222,stroke:#666,stroke-width:1px
-    style Contract fill:#222,stroke:#00FF99,stroke-width:2px
-    style User fill:#222,stroke:#007AFF,stroke-width:2px
+    subgraph "Phase 3: On-Chain Verification"
+        Contract["⛓️ Airdrop Contract"]
+        Verify{"🔍 Verify Logic"}
+        Transfer["💸 Transfer Tokens"]
+    end
+
+    %% Connections
+    Input --> Script
+    Script -->|Generate Hash| Output
+    Output -.->|1. Deploy Root| Contract
+    
+    User -->|2. Request Claim| MetaMask
+    MetaMask -->|3. Sign Message| Contract
+    Output -.->|4. Provide Proof| Contract
+    
+    Contract --> Verify
+    Verify -->|If Valid| Transfer
+    Transfer --> User
+
+    %% Styling
+    style Input fill:#222,stroke:#fff,stroke-width:1px
+    style Script fill:#ff9900,stroke:#333,stroke-width:2px,color:#000
+    style Output fill:#222,stroke:#00ff99,stroke-width:2px
+    
+    style Contract fill:#111,stroke:#007aff,stroke-width:2px
+    style Verify fill:#6a0dad,stroke:#fff,stroke-width:2px
 
 ```
 
-> **The Flow:** > 1. **Generate:** We hash thousands of addresses into a single 32-byte `Merkle Root`.
-> 2. **Deploy:** Only this small Root is stored on the blockchain (Saving $$$ in Gas).
-> 3. **Claim:** Users present a "Proof" (Path to the root) and a Signature to claim their tokens.
+### 🧠 How It Works (Step-by-Step)
+
+| Step | Component | Action & Description |
+| --- | --- | --- |
+| **1.** | **Hashing** | We take thousands of addresses (`input.json`), hash them, and organize them into a **Merkle Tree**. |
+| **2.** | **Deployment** | Instead of uploading 10,000 addresses to Ethereum (which costs thousands of dollars), we upload **only the Root Hash (32 bytes)**. |
+| **3.** | **Signing** | The user connects via Frontend. They sign a typed message (EIP-712). This proves they are the real owner of the address. |
+| **4.** | **Verification** | The Smart Contract checks: <br>
+
+<br> 1. Does the signature match the sender? <br>
+
+<br> 2. Does the Merkle Proof match the stored Root? |
+| **5.** | **Transfer** | If both checks pass, tokens are released according to the vesting schedule. |
 
 ---
 
