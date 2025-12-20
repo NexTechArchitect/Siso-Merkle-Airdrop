@@ -39,31 +39,45 @@ The system splits logic between **Off-Chain Computation** (saving gas) and **On-
 
 ```mermaid
 graph LR
-    subgraph OFF [💻 Off-Chain Backend]
-      Input[("📄 Input List")] -->|Hash| Gen{Merkle Script}
-      Gen -->|Generate| Root[Merkle Root]
-      Gen -->|Generate| Proofs[JSON Proofs]
+    %% Backend Logic
+    subgraph OFFCHAIN ["💻 Off-Chain Backend"]
+        Input[("📄 Input List")] -->|1. Hash| Script{{"⚙️ Merkle Gen"}}
+        Script -->|Output| Root[("🌳 Root")]
+        Script -->|Output| Proofs[("🔐 Proofs")]
     end
 
-    subgraph ON [⛓️ On-Chain Contract]
-      Root -.->|1. Deploy Root| Contract[Airdrop Contract]
-      User((👤 User)) -->|2. Sign Request| Wallet[MetaMask]
-      Wallet -->|3. Submit Proof| Contract
-      Contract -->|4. Verify & Transfer| User
+    %% Interaction Logic
+    subgraph ONCHAIN ["⛓️ On-Chain Layer"]
+        Root -.->|2. Deploy| Contract["🏛️ Airdrop Contract"]
+        User((👤 User)) -->|3. Sign Msg| Wallet["🦊 MetaMask"]
+        
+        Wallet -->|4. Call Claim()| Contract
+        Proofs -.->|Verify Path| Contract
+        Contract -->|5. Transfer| User
     end
 
-    style OFF fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
-    style ON fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
+    %% Styling to make it look Cool
+    style OFFCHAIN fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
+    style ONCHAIN fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
+    
     style Contract fill:#222,stroke:#007AFF,stroke-width:2px
-    style Gen fill:#333,stroke:#FF9900,stroke-width:2px
+    style Script fill:#333,stroke:#FF9900,stroke-width:2px
+    style Wallet fill:#222,stroke:#F6851B,stroke-width:2px
 
 ```
+
+### 🧠 How It Works
+
+1. **Generate:** We hash thousands of addresses into a single 32-byte `Merkle Root`.
+2. **Deploy:** Only this small Root is stored on the blockchain (Saving $$$ in Gas).
+3. **Sign:** User signs a readable EIP-712 message (Phishing protection).
+4. **Claim:** Smart contract verifies the **Proof** (Math) and **Signature** (Consent) before releasing tokens.
 
 ---
 
 ## ⏳ Vesting Schedule
 
-The distribution follows a strict **Phase 1 → Gap → Phase 2** timeline.
+The distribution follows a strict **Phase 1 → Gap → Phase 2** timeline to protect token value.
 
 | Phase Logic | Timeline | Action | Status |
 | --- | --- | --- | --- |
