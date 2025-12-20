@@ -35,31 +35,34 @@
 
 ## 🏗 System Architecture
 
-This project moves complex computation **off-chain** to save gas, while maintaining strict **on-chain** verification.
+The protocol uses a **Hybrid Architecture** to minimize gas costs. The heavy lifting (tree generation) happens off-chain, while the critical verification happens on-chain.
 
-### 🧬 Data Flow Diagram
+### 🧬 Data Logic Flow
 
 ```mermaid
-graph TD
-    subgraph "Off-Chain Generation"
-    List[Input.json (Users)] -->|Hash & Sort| Tree{Merkle Tree Script}
-    Tree -->|Output| Root[Merkle Root]
-    Tree -->|Output| Proofs[Proofs.json]
+graph LR
+    subgraph "OFF-CHAIN (Backend)"
+    Input[("Whitelist.json")] -->|Process| Script{Merkle.js}
+    Script -->|Generate| Root[Merkle Root]
+    Script -->|Generate| Proofs[Proofs.json]
     end
 
-    subgraph "On-Chain Verification"
-    Root -->|Deploy| Contract[Airdrop Contract]
-    User((User)) -->|1. Sign EIP-712| Wallet[MetaMask]
-    Wallet -->|2. Submit Proof + Sig| Contract
-    Contract -->|3. Verify & Transfer| User
+    subgraph "ON-CHAIN (Smart Contract)"
+    Root -.->|Deploy| Contract[Airdrop Contract]
+    User((User)) -->|1. Sign Message| Wallet[MetaMask]
+    Wallet -->|2. Proof + Signature| Contract
+    Contract -->|3. Verify & Send| User
     end
 
-    style Contract fill:#1e1e1e,stroke:#00FF99,stroke-width:2px,color:#fff
-    style Tree fill:#1e1e1e,stroke:#007AFF,stroke-width:2px,color:#fff
+    style Input fill:#222,stroke:#666,stroke-width:1px
+    style Contract fill:#222,stroke:#00FF99,stroke-width:2px
+    style User fill:#222,stroke:#007AFF,stroke-width:2px
 
 ```
 
-> **Why this design?** Storing 10,000 addresses on Ethereum is prohibitively expensive. Storing 1 `bytes32` Root is cheap.
+> **The Flow:** > 1. **Generate:** We hash thousands of addresses into a single 32-byte `Merkle Root`.
+> 2. **Deploy:** Only this small Root is stored on the blockchain (Saving $$$ in Gas).
+> 3. **Claim:** Users present a "Proof" (Path to the root) and a Signature to claim their tokens.
 
 ---
 
