@@ -1,14 +1,4 @@
-Samajh gaya bhai. You are right.
 
-1. **Vesting Order Correction:** "Phase 1 -> Gap -> Phase 2" exact format follow karenge.
-2. **Diagram Upgrade:** Main ek **High-Level System Design** diagram bana raha hu jo "Network Topology" jaisa dikhega. It will look very professional (Black & Neon theme).
-3. **Trim Extra Info:** Text ko cut karke direct point-to-point rakhenge.
-
-Here is the **Perfected Version**.
-
-### **Copy this code entirely:**
-
-```markdown
 <div align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=00FF99&center=true&vCenter=true&width=1000&height=100&lines=SISO+MERKLE+AIRDROP;Production-Grade+Distribution;EIP-712+Signatures+%7C+Phased+Vesting;Gas-Optimized+Architecture" alt="Typing Effect" />
 
