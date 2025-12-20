@@ -39,30 +39,29 @@ The system splits logic between **Off-Chain Computation** (saving gas) and **On-
 
 ```mermaid
 graph LR
-    %% Backend Logic
-    subgraph OFFCHAIN ["💻 Off-Chain Backend"]
-        Input[("📄 Input List")] -->|1. Hash| Script{{"⚙️ Merkle Gen"}}
-        Script -->|Output| Root[("🌳 Root")]
-        Script -->|Output| Proofs[("🔐 Proofs")]
+    %% Off-Chain Section
+    subgraph OFF [💻 Off-Chain Backend]
+        Input["📄 Input List"] -->|1. Hash| Script["⚙️ Merkle Gen"]
+        Script -->|Output| Root["🌳 Root"]
+        Script -->|Output| Proofs["🔐 Proofs"]
     end
 
-    %% Interaction Logic
-    subgraph ONCHAIN ["⛓️ On-Chain Layer"]
+    %% On-Chain Section
+    subgraph ON [⛓️ On-Chain Layer]
         Root -.->|2. Deploy| Contract["🏛️ Airdrop Contract"]
         User((👤 User)) -->|3. Sign Msg| Wallet["🦊 MetaMask"]
         
-        Wallet -->|4. Call Claim()| Contract
+        Wallet -->|4. Call Claim| Contract
         Proofs -.->|Verify Path| Contract
         Contract -->|5. Transfer| User
     end
 
-    %% Styling to make it look Cool
-    style OFFCHAIN fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
-    style ONCHAIN fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
-    
-    style Contract fill:#222,stroke:#007AFF,stroke-width:2px
-    style Script fill:#333,stroke:#FF9900,stroke-width:2px
-    style Wallet fill:#222,stroke:#F6851B,stroke-width:2px
+    %% Styling
+    style OFF fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
+    style ON fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
+    style Contract fill:#222,stroke:#007AFF,stroke-width:2px,color:#fff
+    style Script fill:#333,stroke:#FF9900,stroke-width:2px,color:#fff
+    style Wallet fill:#222,stroke:#F6851B,stroke-width:2px,color:#fff
 
 ```
 
