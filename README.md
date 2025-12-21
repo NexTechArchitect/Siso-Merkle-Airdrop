@@ -6,7 +6,6 @@
 
   <p>
     <a href="https://github.com/NexTechArchitect/Siso-Merkle-Airdrop">
-    <img src="https://img.shields.io/badge/Logic-Merkle_Proofs-007AFF?style=for-the-badge&logo=json&logoColor=white" />
     <img src="https://img.shields.io/badge/Tech-Foundry-BE5212?style=for-the-badge&logo=foundry&logoColor=white" />
   </p>
 
