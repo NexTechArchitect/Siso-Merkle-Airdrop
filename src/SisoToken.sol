@@ -12,10 +12,7 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SisoToken is ERC20, ERC20Burnable, Pausable, Ownable {
-    /**
-     * @notice Constructor
-     * @param initialSupply Initial supply minted to deployer (can be 0)
-     */
+    
     constructor(
         uint256 initialSupply
     ) ERC20("SISO Token", "SISO") Ownable(msg.sender) {
