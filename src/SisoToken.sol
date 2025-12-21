@@ -46,7 +46,7 @@ contract SisoToken is ERC20, ERC20Burnable, Pausable, Ownable {
     }
 
     /**
-     * @dev OpenZeppelin v5 hook
+     * @dev OpenZeppelin v5 hook 
      */
     function _update(
         address from,
