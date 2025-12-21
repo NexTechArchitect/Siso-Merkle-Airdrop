@@ -18,6 +18,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
     /*//////////////////////////////////////////////////////////////
                                 ERRORS
     //////////////////////////////////////////////////////////////*/
+
     error InvalidMerkleProof();
     error InvalidSignature();
     error NothingToClaim();
