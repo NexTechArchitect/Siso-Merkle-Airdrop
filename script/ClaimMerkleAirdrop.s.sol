@@ -15,7 +15,7 @@ contract ClaimMerkleAirdrop is Script {
     uint256 private constant TOTAL_ALLOCATION = 1000000000000000000000; // 1000 tokens (18 decimals)
 
     /*//////////////////////////////////////////////////////////////
-                        MERKLE PROOF (STATIC)
+                        MERKLE PROOF (STATIC) 
     //////////////////////////////////////////////////////////////*/
 
     bytes32 private constant P0 =
