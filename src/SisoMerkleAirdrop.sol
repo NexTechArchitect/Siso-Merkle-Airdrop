@@ -27,7 +27,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
                               CONSTANTS
     //////////////////////////////////////////////////////////////*/
     uint256 public constant BPS = 10_000;
-    uint256 public constant PHASE1_BPS = 5_000; // 50%
+    uint256 public constant PHASE1_BPS = 5_000; // 50% unlock
 
     bytes32 private constant CLAIM_TYPEHASH =
         keccak256("Claim(address account,uint256 totalAllocation)");
