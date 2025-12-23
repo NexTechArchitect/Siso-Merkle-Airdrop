@@ -31,8 +31,6 @@ contract SisoMerkleAirdropTest is Test {
 
         (v, r, s) = vm.sign(1, keccak256("dummy"));
 
-        // ✅ explicitly clear proof (no allocation)
-        delete emptyProof;
     }
 
     /*//////////////////////////////////////////////////////////////
