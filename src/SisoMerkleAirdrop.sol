@@ -72,6 +72,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
         phase2End = phase2Start + 7 days;
     }
 
+
     /*/////////////////////////////////////////////////////////////
                              CLAIM FUNCTION
     /////////////////////////////////////////////////////////////*/
