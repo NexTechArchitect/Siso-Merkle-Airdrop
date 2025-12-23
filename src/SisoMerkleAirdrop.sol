@@ -81,6 +81,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
     /*/////////////////////////////////////////////////////////////
                              CLAIM FUNCTION
     /////////////////////////////////////////////////////////////*/
+
     function claim(
         uint256 totalAllocation,
         bytes32[] calldata merkleProof,
