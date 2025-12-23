@@ -123,6 +123,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
     /*//////////////////////////////////////////////////////////////
                         INTERNAL VIEW HELPERS
     //////////////////////////////////////////////////////////////*/
+
     function _maxClaimableNow(
         uint256 totalAllocation
     ) internal view returns (uint256) {
