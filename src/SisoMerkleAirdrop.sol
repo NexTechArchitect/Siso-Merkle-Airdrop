@@ -54,6 +54,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
     /*//////////////////////////////////////////////////////////////
                                 EVENTS
     //////////////////////////////////////////////////////////////*/
+
     event Claimed(address indexed user, uint256 amount);
     event UnclaimedWithdrawn(uint256 amount);
 
