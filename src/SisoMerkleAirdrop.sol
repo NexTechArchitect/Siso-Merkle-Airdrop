@@ -36,6 +36,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
     /*//////////////////////////////////////////////////////////////
                              IMMUTABLES
     //////////////////////////////////////////////////////////////*/
+
     IERC20  public immutable token;
     bytes32 public immutable merkleRoot;
 
