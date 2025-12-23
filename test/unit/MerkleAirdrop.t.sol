@@ -5,6 +5,7 @@ import "forge-std/Test.sol";
 import "../../src/SisoMerkleAirdrop.sol";
 import "../../src/SisoToken.sol";
 
+
 contract SisoMerkleAirdropTest is Test {
     SisoMerkleAirdrop airdrop;
     SisoToken token;
