@@ -61,6 +61,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
+
     constructor(
         address _token,
         bytes32 _merkleRoot
