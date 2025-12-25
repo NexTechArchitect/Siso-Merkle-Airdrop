@@ -21,7 +21,7 @@
   <table>
     <tr>
       <td align="center"><a href="#-architectural-flow"><strong>🏗 Architecture</strong></a></td>
-      <td align="center"><a href="#-vesting-timeline"><strong>⏳ Vesting Gantt</strong></a></td>
+      <td align="center"><a href="#-vesting-timeline"><strong>⏳ Vesting Timeline</strong></a></td>
       <td align="center"><a href="#-security-mechanics"><strong>🔐 Security</strong></a></td>
       <td align="center"><a href="#-project-structure"><strong>📂 Structure</strong></a></td>
     </tr>
@@ -74,22 +74,26 @@ graph LR
 
 ## ⏳ Vesting Timeline
 
-We implement a visual lifecycle for claims to ensure long-term holder alignment.
+The distribution follows a **Time-Based Lifecycle** to protect the token economy.
 
 ```mermaid
-gantt
-    title Token Distribution Lifecycle
-    dateFormat  X
-    axisFormat %d
-    section Phases
-    Phase 1 (50% Unlocked)   :active, a1, 0, 30d
-    Cliff Period (Locked)    :crit, a2, after a1, 60d
-    Phase 2 (50% Unlocked)   :active, a3, after a2, 7d
-    Expiry (Burn)            :done, a4, after a3, 1d
+timeline
+    title Airdrop Lifecycle (0 to 97 Days)
+    Day 0 : 🟢 TGE Starts : 50% Unlocked
+    Day 30 : 🟡 Cliff Starts : Claims Paused
+    Day 90 : 🔵 Cliff Ends : Remaining 50% Unlocked
+    Day 97 : 🔴 Expiry : Unclaimed Tokens Burned
 
 ```
 
-> **Note:** The "Cliff" period ensures that users must hold engagement for 90 days to receive the full allocation.
+### 🔍 Phase Breakdown
+
+| Time Period | Phase Name | User Action |
+| --- | --- | --- |
+| **0 - 30 Days** | **Phase 1** | ✅ Claim first **50%** of tokens immediately. |
+| **30 - 90 Days** | **Holding Gap** | ⏸️ **No claims allowed.** Encourages holding. |
+| **90 - 97 Days** | **Phase 2** | ✅ Claim the **Remaining 50%**. |
+| **> 97 Days** | **Closed** | ❌ Claims closed. Owner withdraws dust. |
 
 ---
 
