@@ -15,6 +15,8 @@ contract SisoMerkleAirdropFuzzTest is Test {
     function setUp() public {
         token = new SisoToken(1_000_000 ether);
 
+
+
         airdrop = new SisoMerkleAirdrop(
             address(token),
             keccak256("dummy-root")
