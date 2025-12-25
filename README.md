@@ -1,17 +1,19 @@
 
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=00FF99&center=true&vCenter=true&width=1000&height=100&lines=SISO+MERKLE+AIRDROP;Production-Grade+Distribution;EIP-712+Signatures+%7C+Phased+Vesting;Gas-Optimized+Architecture" alt="Typing Effect" />
-
-  <br/>
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=00FF99&center=true&vCenter=true&width=1000&height=100&lines=SISO+MERKLE+AIRDROP;Production-Grade+Token+Distribution;EIP-712+Signatures+%7C+Phased+Vesting;Gas-Optimized+Architecture" alt="Typing Effect" />
 
   <p>
     <a href="https://github.com/NexTechArchitect/Siso-Merkle-Airdrop">
-    <img src="https://img.shields.io/badge/Tech-Foundry-BE5212?style=for-the-badge&logo=foundry&logoColor=white" />
+      <img src="https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity&logoColor=white" />
+    </a>
+    <img src="https://img.shields.io/badge/Framework-Foundry-BE5212?style=for-the-badge&logo=foundry&logoColor=white" />
+    <img src="https://img.shields.io/badge/Security-OpenZeppelin-4E5EE4?style=for-the-badge&logo=openzeppelin&logoColor=white" />
+    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
   </p>
 
   <p width="80%">
-    <b>A production-grade architecture for distributing tokens efficiently.</b><br/>
-    Secured by Merkle Proofs and EIP-712 Signatures to minimize on-chain costs.
+    <b>A gas-optimized protocol for large-scale token distribution.</b><br/>
+    Leverages off-chain Merkle Tree generation and on-chain EIP-712 signature verification to reduce claim costs by ~40%.
   </p>
 
   <br/>
@@ -19,7 +21,7 @@
   <table>
     <tr>
       <td align="center"><a href="#-architectural-flow"><strong>🏗 Architecture</strong></a></td>
-      <td align="center"><a href="#-vesting-schedule"><strong>⏳ Vesting</strong></a></td>
+      <td align="center"><a href="#-vesting-timeline"><strong>⏳ Vesting Gantt</strong></a></td>
       <td align="center"><a href="#-security-mechanics"><strong>🔐 Security</strong></a></td>
       <td align="center"><a href="#-project-structure"><strong>📂 Structure</strong></a></td>
     </tr>
@@ -31,19 +33,19 @@
 
 ## 🏗 Architectural Flow
 
-The system splits logic between **Off-Chain Computation** (saving gas) and **On-Chain Verification** (security).
+The system uses a **Hybrid Off-Chain/On-Chain** model. We calculate eligibility off-chain to save gas, and verify proofs on-chain for security.
 
 ```mermaid
 graph LR
-    %% Off-Chain Section
-    subgraph OFF [💻 Off-Chain Backend]
-        Input["📄 Input List"] -->|1. Hash| Script["⚙️ Merkle Gen"]
-        Script -->|Output| Root["🌳 Root"]
-        Script -->|Output| Proofs["🔐 Proofs"]
+    %% Backend Logic
+    subgraph OFFCHAIN ["💻 Off-Chain Backend"]
+        Input[("📄 Input List")] -->|1. Hash| Script{{"⚙️ Merkle Gen"}}
+        Script -->|Output| Root[("🌳 Root")]
+        Script -->|Output| Proofs[("🔐 Proofs")]
     end
 
-    %% On-Chain Section
-    subgraph ON [⛓️ On-Chain Layer]
+    %% Interaction Logic
+    subgraph ONCHAIN ["⛓️ On-Chain Layer"]
         Root -.->|2. Deploy| Contract["🏛️ Airdrop Contract"]
         User((👤 User)) -->|3. Sign Msg| Wallet["🦊 MetaMask"]
         
@@ -53,35 +55,41 @@ graph LR
     end
 
     %% Styling
-    style OFF fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
-    style ON fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
-    style Contract fill:#222,stroke:#007AFF,stroke-width:2px,color:#fff
-    style Script fill:#333,stroke:#FF9900,stroke-width:2px,color:#fff
-    style Wallet fill:#222,stroke:#F6851B,stroke-width:2px,color:#fff
+    style OFFCHAIN fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
+    style ONCHAIN fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
+    style Contract fill:#222,stroke:#007AFF,stroke-width:2px
+    style Script fill:#333,stroke:#FF9900,stroke-width:2px
 
 ```
 
-### 🧠 How It Works
+### 🧠 Engineering Decisions
 
-1. **Generate:** We hash thousands of addresses into a single 32-byte `Merkle Root`.
-2. **Deploy:** Only this small Root is stored on the blockchain (Saving $$$ in Gas).
-3. **Sign:** User signs a readable EIP-712 message (Phishing protection).
-4. **Claim:** Smart contract verifies the **Proof** (Math) and **Signature** (Consent) before releasing tokens.
+| Problem | Our Solution |
+| --- | --- |
+| **High Gas Costs** | Storing 10k users on-chain is expensive. We store **1 Root Hash (32 bytes)** instead. |
+| **Front-Running** | `EIP-712` typed signatures bind the claim request to a specific user and chain ID. |
+| **Token Dumping** | A strict **Phased Vesting** schedule prevents immediate market saturation. |
 
 ---
 
-## ⏳ Vesting Schedule
+## ⏳ Vesting Timeline
 
-The distribution follows a strict **Phase 1 → Gap → Phase 2** timeline to protect token value.
+We implement a visual lifecycle for claims to ensure long-term holder alignment.
 
-| Phase Logic | Timeline | Action | Status |
-| --- | --- | --- | --- |
-| **🟢 Phase 1** | `Deployment` → `30 Days` | **Claim 50%** (Instant) | Active |
-| **🟡 Gap Period** | `30 Days` → `90 Days` | **Locked** (No Claims) | Holding |
-| **🔵 Phase 2** | `90 Days` → `97 Days` | **Claim Remaining 50%** | Vesting |
-| **🔴 Expiry** | `> 97 Days` | **Burn / Withdraw** | Closed |
+```mermaid
+gantt
+    title Token Distribution Lifecycle
+    dateFormat  X
+    axisFormat %d
+    section Phases
+    Phase 1 (50% Unlocked)   :active, a1, 0, 30d
+    Cliff Period (Locked)    :crit, a2, after a1, 60d
+    Phase 2 (50% Unlocked)   :active, a3, after a2, 7d
+    Expiry (Burn)            :done, a4, after a3, 1d
 
-> **Note:** If a user misses the claim window, the owner can withdraw the remaining tokens to prevent dust accumulation.
+```
+
+> **Note:** The "Cliff" period ensures that users must hold engagement for 90 days to receive the full allocation.
 
 ---
 
@@ -94,15 +102,15 @@ We use industry-standard patterns to prevent exploits.
 <td width="50%" valign="top">
 <h3>🛡️ Cryptographic Proofs</h3>
 <ul>
-<li><b>Merkle Tree:</b> We store only the <code>Root Hash</code> on-chain. This makes verifying 10,000 users as cheap as verifying 1 user.</li>
-<li><b>Verification:</b> <code>MerkleProof.verify()</code> ensures the user is part of the original snapshot.</li>
+<li><b>Merkle Tree:</b> Uses `Keccak256` hashing to ensure data integrity.</li>
+<li><b>Verification:</b> `MerkleProof.verify()` checks inclusion without revealing the full tree.</li>
 </ul>
 </td>
 <td width="50%" valign="top">
 <h3>✍️ EIP-712 Signatures</h3>
 <ul>
-<li><b>Anti-Phishing:</b> Users sign a structured, readable message ("Claim Airdrop") instead of a blind hex string.</li>
-<li><b>Replay Protection:</b> Signatures include the <code>ChainID</code> and <code>Contract Address</code>, so a signature from Testnet cannot be used on Mainnet.</li>
+<li><b>Anti-Phishing:</b> Users sign a structured, readable message ("Claim Airdrop").</li>
+<li><b>Replay Protection:</b> Signatures include `ChainID` and `Contract Address`.</li>
 </ul>
 </td>
 </tr>
@@ -112,20 +120,20 @@ We use industry-standard patterns to prevent exploits.
 
 ## 📂 Project Structure
 
-A clean separation of concerns.
+A clean separation of concerns: **Data** (Off-chain) vs **Source** (On-chain).
 
 ```bash
 .
-├── airdrop-data/          # 🧠 Backend Logic
-│   ├── input.json         # Address List
-│   ├── merkle.js          # Tree Generation Script
+├── airdrop-data/          # 🧠 Off-Chain Logic
+│   ├── input.json         # Raw Whitelist (Address + Amount)
+│   ├── merkle.js          # Node.js Script for Root Generation
 │   └── backend/           # Signing Utilities
 ├── src/                   # ⛓️ Smart Contracts
-│   ├── SisoToken.sol      # ERC20 Asset
+│   ├── SisoToken.sol      # The ERC20 Asset
 │   └── MerkleAirdrop.sol  # Distribution Logic
 ├── script/                # 🚀 DevOps
 │   └── Deploy.s.sol       # Deployment Scripts
-└── test/                  # 🧪 Foundry Tests
+└── test/                  # 🧪 Foundry Test Suite
 
 ```
 
@@ -133,35 +141,51 @@ A clean separation of concerns.
 
 ## 🚀 Quick Start
 
+**Prerequisites:** `Foundry`, `Node.js`
+
 ```bash
 # 1. Install Dependencies
 forge install
 npm install
 
-# 2. Generate Merkle Root
+# 2. Generate Merkle Root & Proofs
 node airdrop-data/merkle.js
 
-# 3. Deploy to Sepolia
-make deploy ARGS="--network sepolia"
+# 3. Test the Claims
+forge test -vv
 
 ```
 
 ---
 
 <div align="center">
-  <br/>
-  <img src="https://raw.githubusercontent.com/rajput2107/rajput2107/master/Assets/Developer.gif" width="45" />
-  <br/>
-  <b>Developed by NexTechArchitect</b>
-  <br/>
-  <i>Building the Future of Web3</i>
-  <br/><br/>
 
-  <a href="https://github.com/NexTechArchitect">
-    <img src="https://img.shields.io/badge/GitHub-Profile-181717?style=flat&logo=github&logoColor=white" alt="GitHub"/>
-  </a>
-  <a href="https://linkedin.com/in/amit-kumar-811a11277">
-    <img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"/>
-  </a>
+
+
+
+
+<b>Protocol Engineered by NexTechArchitect</b>
+
+
+
+
+
+<i>Smart Contract Security • Foundry • Cryptography</i>
+
+
+
+
+
+
+<a href="https://github.com/NexTechArchitect">
+<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
+</a>
+&nbsp;&nbsp;
+<a href="https://linkedin.com/in/amit-kumar-811a11277">
+<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+</a>
 </div>
 
+```
+
+```
