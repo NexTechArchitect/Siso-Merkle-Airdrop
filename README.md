@@ -1,12 +1,14 @@
 
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=00FF99&center=true&vCenter=true&width=1000&height=100&lines=SISO+MERKLE+AIRDROP;Production-Grade+Token+Distribution;EIP-712+Signatures+%7C+Phased+Vesting;Gas-Optimized+Architecture" alt="Typing Effect" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=007AFF&center=true&vCenter=true&width=1000&height=100&lines=SISO+MERKLE+AIRDROP;Production-Grade+Token+Distribution;EIP-712+Signatures+%7C+Phased+Vesting;Gas-Optimized+Architecture" alt="Typing Effect" />
 
   <p>
     <a href="https://github.com/NexTechArchitect/Siso-Merkle-Airdrop">
       <img src="https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity&logoColor=white" />
     </a>
+    <img src="https://img.shields.io/badge/Framework-Foundry-BE5212?style=for-the-badge&logo=foundry&logoColor=white" />
     <img src="https://img.shields.io/badge/Security-OpenZeppelin-4E5EE4?style=for-the-badge&logo=openzeppelin&logoColor=white" />
+    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
   </p>
 
   <p width="80%">
