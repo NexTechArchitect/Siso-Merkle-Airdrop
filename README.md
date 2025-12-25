@@ -7,8 +7,6 @@
       <img src="https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity&logoColor=white" />
     </a>
     <img src="https://img.shields.io/badge/Framework-Foundry-BE5212?style=for-the-badge&logo=foundry&logoColor=white" />
-    <img src="https://img.shields.io/badge/Security-OpenZeppelin-4E5EE4?style=for-the-badge&logo=openzeppelin&logoColor=white" />
-    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
   </p>
 
   <p width="80%">
