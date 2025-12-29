@@ -160,3 +160,7 @@ contract SisoMerkleAirdrop is EIP712, Ownable {
         emit UnclaimedWithdrawn(bal);
     }
 }
+
+    /*///////////////////////////////////////////////////////////////
+                        view & Return FUNCTION                    
+    ///////////////////////////////////////////////////////////////*/
