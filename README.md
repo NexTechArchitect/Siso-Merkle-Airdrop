@@ -1,45 +1,71 @@
 
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=007AFF&center=true&vCenter=true&width=1000&height=100&lines=SISO+MERKLE+AIRDROP;Production-Grade+Token+Distribution;EIP-712+Signatures+%7C+Phased+Vesting;Gas-Optimized+Architecture" alt="Typing Effect" />
+
+  <br />
+  <br />
+
+  <img src="https://img.icons8.com/ios-filled/100/9d4edd/airdrop.png" alt="Airdrop Logo" />
+
+  <h1 style="font-size: 3rem; margin-bottom: 0;">Merkle-712 Airdrop Protocol</h1>
+
+  <p style="font-size: 1.1rem; color: #b298dc; max-width: 600px;">
+    <strong>A gas-optimized, cryptographically secure token distribution system.</strong><br/>
+    Combines off-chain Merkle Trees with on-chain EIP-712 Signature verification for O(1) claim costs.
+  </p>
 
   <p>
     <a href="https://github.com/NexTechArchitect/Siso-Merkle-Airdrop">
-      <img src="https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity&logoColor=white" />
+      <img src="https://img.shields.io/badge/Solidity-0.8.20-2e2e2e?style=for-the-badge&logo=solidity&logoColor=white" />
     </a>
-    <img src="https://img.shields.io/badge/Framework-Foundry-BE5212?style=for-the-badge&logo=foundry&logoColor=white" />
+    &nbsp;
+    <a href="https://github.com/NexTechArchitect/Siso-Merkle-Airdrop">
+      <img src="https://img.shields.io/badge/Framework-Foundry-9d4edd?style=for-the-badge&logo=rust&logoColor=white" />
+    </a>
+    &nbsp;
+    <a href="https://eips.ethereum.org/EIPS/eip-712">
+      <img src="https://img.shields.io/badge/Standard-EIP--712-2e2e2e?style=for-the-badge&logo=ethereum&logoColor=white" />
+    </a>
   </p>
 
-  <p width="80%">
-    <b>A gas-optimized protocol for large-scale token distribution.</b><br/>
-    Leverages off-chain Merkle Tree generation and on-chain EIP-712 signature verification to reduce claim costs by ~40%.
-  </p>
-
-  <br/>
-
-  <table>
-    <tr>
-      <td align="center"><a href="#-architectural-flow"><strong>🏗 Architecture</strong></a></td>
-      <td align="center"><a href="#-vesting-timeline"><strong>⏳ Vesting Timeline</strong></a></td>
-      <td align="center"><a href="#-security-mechanics"><strong>🔐 Security</strong></a></td>
-      <td align="center"><a href="#-project-structure"><strong>📂 Structure</strong></a></td>
-    </tr>
-  </table>
+  <br />
 
 </div>
 
 ---
 
+## 📑 Table of Contents
+
+- [🧠 Executive Summary](#-executive-summary)
+- [🏗 Architectural Flow](#-architectural-flow)
+- [✍️ EIP-712 Signature Standards](#%EF%B8%8F-eip-712-signature-standards)
+- [🔢 Merkle Tree Mathematics](#-merkle-tree-mathematics)
+- [🛡 Security & Vesting Timeline](#-security--vesting-timeline)
+- [📂 Project Structure](#-project-structure)
+
+---
+
+## 🧠 Executive Summary
+
+This protocol solves the "Million User Problem" in token distribution. Sending tokens to 1 million users via a loop would cost millions of dollars in gas.
+
+Instead, we use a **Pull-Based Architecture**:
+1.  **Compression:** We compress 1 million user balances into a single **32-byte Merkle Root**.
+2.  **Verification:** Users provide a cryptographic proof that they are part of that root.
+3.  **Security:** We add an extra layer of **EIP-712 Signatures** to prevent "Front-Running Claims" where a bot steals a user's proof to claim tokens for themselves.
+
+---
+
 ## 🏗 Architectural Flow
 
-The system uses a **Hybrid Off-Chain/On-Chain** model. We calculate eligibility off-chain to save gas, and verify proofs on-chain for security.
+The system uses a **Hybrid Off-Chain/On-Chain** model. We calculate eligibility off-chain to save gas, and verify proofs on-chain for trustless execution.
 
 ```mermaid
 graph LR
     %% Backend Logic
     subgraph OFFCHAIN ["💻 Off-Chain Backend"]
-        Input[("📄 Input List")] -->|1. Hash| Script{{"⚙️ Merkle Gen"}}
-        Script -->|Output| Root[("🌳 Root")]
-        Script -->|Output| Proofs[("🔐 Proofs")]
+        Input[("📄 Whitelist")] -->|1. Hash & Sort| Script{{"⚙️ Merkle Engine"}}
+        Script -->|Output| Root[("🌳 Merkle Root")]
+        Script -->|Output| Proofs[("🔐 User Proofs")]
     end
 
     %% Interaction Logic
@@ -49,30 +75,75 @@ graph LR
         
         Wallet -->|4. Call Claim| Contract
         Proofs -.->|Verify Path| Contract
-        Contract -->|5. Transfer| User
+        Contract -->|5. Transfer Token| User
     end
 
-    %% Styling
-    style OFFCHAIN fill:#1a1a1a,stroke:#666,stroke-width:1px,color:#fff
-    style ONCHAIN fill:#0d1117,stroke:#00FF99,stroke-width:2px,color:#fff
-    style Contract fill:#222,stroke:#007AFF,stroke-width:2px
-    style Script fill:#333,stroke:#FF9900,stroke-width:2px
+    style OFFCHAIN fill:#1a1a1a,stroke:#b298dc
+    style ONCHAIN fill:#2d1b4e,stroke:#9d4edd,stroke-width:2px
+    style Contract fill:#1a1a1a,stroke:#fff
+    style Script fill:#1a1a1a,stroke:#fff
 
 ```
 
 ### 🧠 Engineering Decisions
 
-| Problem | Our Solution |
+| Problem | Solution Architecture |
 | --- | --- |
-| **High Gas Costs** | Storing 10k users on-chain is expensive. We store **1 Root Hash (32 bytes)** instead. |
-| **Front-Running** | `EIP-712` typed signatures bind the claim request to a specific user and chain ID. |
+| **Storage Cost** | Storing 10k users on-chain is prohibitive. We store **1 Root Hash (32 bytes)** instead. |
+| **Front-Running** | `EIP-712` typed signatures bind the claim request to a specific `msg.sender` and `chainId`. |
 | **Token Dumping** | A strict **Phased Vesting** schedule prevents immediate market saturation. |
 
 ---
 
-## ⏳ Vesting Timeline
+## ✍️ EIP-712 Signature Standards
 
-The distribution follows a **Time-Based Lifecycle** to protect the token economy.
+We implement strict **Typed Structured Data** hashing. This ensures users know exactly what they are signing, preventing phishing attacks.
+
+### The Domain Separator
+
+```solidity
+struct EIP712Domain {
+    string name;              // "SisoAirdrop"
+    string version;           // "1.0.0"
+    uint256 chainId;          // 11155111 (Sepolia)
+    address verifyingContract;// Contract Address
+}
+
+```
+
+### The Message Struct
+
+```solidity
+struct AirdropClaim {
+    address account;
+    uint256 amount;
+}
+
+```
+
+> **Why?** This prevents **Replay Attacks**. A signature generated for the Sepolia Testnet cannot be re-used on Mainnet because the `chainId` inside the hash would be different.
+
+---
+
+## 🔢 Merkle Tree Mathematics
+
+The Merkle Tree allows us to verify inclusion in a set of data without revealing the entire set.
+
+### 🌳 Tree Structure
+
+* **Leaves:** `Keccak256(address, amount)`
+* **Nodes:** `Keccak256(Child_A, Child_B)`
+* **Root:** The final hash at the top of the tree.
+
+If a user wants to claim, they must provide a **Proof Path** (hashes of sibling nodes). The contract re-calculates the hash up the tree.
+
+$$ \text{If } \text{CalculatedRoot} == \text{StoredRoot} \implies \text{Valid Claim} $$
+
+---
+
+## 🛡 Security & Vesting Timeline
+
+The distribution follows a **Time-Based Lifecycle** to protect the token economy from immediate sell pressure.
 
 ```mermaid
 timeline
@@ -95,41 +166,16 @@ timeline
 
 ---
 
-## 🔐 Security Mechanics
-
-We use industry-standard patterns to prevent exploits.
-
-<table width="100%">
-<tr>
-<td width="50%" valign="top">
-<h3>🛡️ Cryptographic Proofs</h3>
-<ul>
-<li><b>Merkle Tree:</b> Uses `Keccak256` hashing to ensure data integrity.</li>
-<li><b>Verification:</b> `MerkleProof.verify()` checks inclusion without revealing the full tree.</li>
-</ul>
-</td>
-<td width="50%" valign="top">
-<h3>✍️ EIP-712 Signatures</h3>
-<ul>
-<li><b>Anti-Phishing:</b> Users sign a structured, readable message ("Claim Airdrop").</li>
-<li><b>Replay Protection:</b> Signatures include `ChainID` and `Contract Address`.</li>
-</ul>
-</td>
-</tr>
-</table>
-
----
-
 ## 📂 Project Structure
 
-A clean separation of concerns: **Data** (Off-chain) vs **Source** (On-chain).
+A clean separation of concerns: **Data** (Off-chain generation) vs **Source** (On-chain execution).
 
-```bash
-.
+```text
+Siso-Merkle-Airdrop/
 ├── airdrop-data/          # 🧠 Off-Chain Logic
 │   ├── input.json         # Raw Whitelist (Address + Amount)
 │   ├── merkle.js          # Node.js Script for Root Generation
-│   └── backend/           # Signing Utilities
+│   └── backend/           # EIP-712 Signing Utilities
 ├── src/                   # ⛓️ Smart Contracts
 │   ├── SisoToken.sol      # The ERC20 Asset
 │   └── MerkleAirdrop.sol  # Distribution Logic
@@ -141,51 +187,27 @@ A clean separation of concerns: **Data** (Off-chain) vs **Source** (On-chain).
 
 ---
 
-## 🚀 Quick Start
-
-**Prerequisites:** `Foundry`, `Node.js`
-
-```bash
-# 1. Install Dependencies
-forge install
-npm install
-
-# 2. Generate Merkle Root & Proofs
-node airdrop-data/merkle.js
-
-# 3. Test the Claims
-forge test -vv
-
-```
-
----
-
 <div align="center">
 
 
 
 
 
-<b>Protocol Engineered by NexTechArchitect</b>
+<b>Engineered by NEXTECHARHITECT</b>
+
+
+
+
+<i>Smart Contract Developer · Solidity · Foundry · Web3 Engineering</i>
 
 
 
 
 
-<i>Smart Contract Security • Foundry • Cryptography</i>
 
 
-
-
-
-
-<a href="https://github.com/NexTechArchitect">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
-</a>
-&nbsp;&nbsp;
-<a href="https://linkedin.com/in/amit-kumar-811a11277">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
-</a>
+<a href="https://github.com/NexTechArchitect">GitHub</a> •
+<a href="https://www.google.com/search?q=https://twitter.com/NexTechArchitect">Twitter</a>
 </div>
 
 ```
