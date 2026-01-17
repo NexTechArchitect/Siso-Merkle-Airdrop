@@ -2,10 +2,6 @@
 <div align="center">
 
   <br />
-  <br />
-
-  <img src="https://img.icons8.com/ios-filled/100/9d4edd/airdrop.png" alt="Airdrop Logo" />
-
   <h1 style="font-size: 3rem; margin-bottom: 0;">Merkle-712 Airdrop Protocol</h1>
 
   <p style="font-size: 1.1rem; color: #b298dc; max-width: 600px;">
