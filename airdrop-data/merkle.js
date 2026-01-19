@@ -4,15 +4,11 @@ import { ethers } from "ethers";
 import { MerkleTree } from "merkletreejs";
 import keccak256 from "keccak256";
 
-// -------- paths --------
 const INPUT_PATH = path.join(process.cwd(), "airdrop-data", "input.json");
 const OUTPUT_PATH = path.join(process.cwd(), "airdrop-data", "output.json");
 
-// -------- load input.json --------
 const input = JSON.parse(fs.readFileSync(INPUT_PATH, "utf8"));
 
-// -------- build leaves --------
-// leaf = keccak256(abi.encode(address, amount))
 const leaves = Object.entries(input).map(([address, amount]) => {
   return ethers.solidityPackedKeccak256(
     ["address", "uint256"],
@@ -20,15 +16,12 @@ const leaves = Object.entries(input).map(([address, amount]) => {
   );
 });
 
-// -------- create Merkle tree --------
 const tree = new MerkleTree(leaves, keccak256, {
   sortPairs: true
 });
 
-// -------- get root --------
 const merkleRoot = tree.getHexRoot();
 
-// -------- build claims --------
 const claims = {};
 
 Object.entries(input).forEach(([address, amount]) => {
@@ -43,7 +36,6 @@ Object.entries(input).forEach(([address, amount]) => {
   };
 });
 
-// -------- write output.json --------
 const output = {
   merkleRoot,
   claims
