@@ -9,7 +9,6 @@ contract SisoMerkleAirdropFuzzTest is Test {
     SisoMerkleAirdrop airdrop;
     SisoToken token;
 
-    // empty proof (no allocation, no new)
     bytes32[] emptyProof;
 
     function setUp() public {
@@ -30,7 +29,6 @@ contract SisoMerkleAirdropFuzzTest is Test {
                           FUZZ TESTS
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice user can NEVER claim more than allocation
     function testFuzzCannotOverClaim(address user, uint256 allocation) public {
         allocation = bound(allocation, 1 ether, 100_000 ether);
 
@@ -39,7 +37,6 @@ contract SisoMerkleAirdropFuzzTest is Test {
         airdrop.claim(allocation, emptyProof, 0, bytes32(0), bytes32(0));
     }
 
-    /// @notice claim outside any valid window always fails
     function testFuzzClaimOutsideWindow(
         address user,
         uint256 allocation,
@@ -55,7 +52,6 @@ contract SisoMerkleAirdropFuzzTest is Test {
         airdrop.claim(allocation, emptyProof, 0, bytes32(0), bytes32(0));
     }
 
-    /// @notice invalid signature must always revert
     function testFuzzInvalidSignatureAlwaysFails(
         address user,
         uint256 allocation
@@ -67,9 +63,9 @@ contract SisoMerkleAirdropFuzzTest is Test {
         airdrop.claim(
             allocation,
             emptyProof,
-            27, // fake v
-            bytes32(0), // fake r
-            bytes32(0) // fake s
+            27, // 
+            bytes32(0), 
+            bytes32(0) 
         );
     }
 }
