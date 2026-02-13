@@ -16,7 +16,6 @@ contract SisoMerkleAirdropTest is Test {
     bytes32 r;
     bytes32 s;
 
-    // ✅ EMPTY MERKLE PROOF (DECLARED ONCE)
     bytes32[] emptyProof;
 
     function setUp() public {
